@@ -1,0 +1,11 @@
+# Ignore CSV files
+*.csv
+
+# Ignore tar files
+*.tar
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tbz2
+*.tar.xz
+*.txz
