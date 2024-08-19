@@ -1,0 +1,11 @@
+accuracy,precision,recall,f1_score,auc,Model,Run,Type
+1.0,1.0,1.0,1.0,1.0,SVC,run_10,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_8,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_7,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_4,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_1,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_9,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_5,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_6,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_3,train
+1.0,1.0,1.0,1.0,1.0,SVC,run_2,train
