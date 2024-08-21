@@ -1,7 +1,7 @@
 import argparse
 import os
 import pandas as pd
-from .make_temp_data import generate_random_data
+#from .make_temp_data import generate_random_data
 from .classification_model_stability_test import FeatureClassifiers
 from .result_process import aggregate_metrics, aggregate_feature_importance, aggregate_predictions, save_aggregated_data
 from .make_plots import plot_auc_curves, plot_auc_boxplot, plot_feature_importance, plot_radar_chart
@@ -25,11 +25,7 @@ def main():
         df = pd.read_csv(args.data, index_col=0)  # Load the CSV into a DataFrame
         print(f"Using provided dataset: {args.data}")
     else:
-        # Generate the random dataset
-        df = generate_random_data(n_samples=args.n_samples, n_features=args.n_features)
-        temp_data_path = os.path.join(args.prelim_output, 'temp_dataset.csv')
-        df.to_csv(temp_data_path, index=True)
-        print(f"Generated random dataset at: {temp_data_path}")
+        print(f"Issue with the Data")
 
     # Step 2: Run classification model stability tests for all models
     models = ['LogisticRegression', 'SVC', 'RandomForestClassifier']

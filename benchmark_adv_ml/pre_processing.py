@@ -6,9 +6,20 @@ from sklearn.model_selection import train_test_split
 
 # Function to load data and preprocess it
 def load_and_preprocess_data(file_path, target_column='label'):
-    df = pd.read_csv(file_path, index_col=0)  # Ensure the index (sample names) is preserved
-    df = df.apply(pd.to_numeric, errors='coerce')
+    df = pd.read_csv(file_path)  # Remove index_col=0 to avoid issues with missing or misaligned indices
+    
+    # Ensure all columns except target are numeric
+    for col in df.columns:
+        if col != target_column:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+    
+    # Fill missing values with the mean of each column
     df.fillna(df.mean(), inplace=True)
+    
+    # Convert target column to numeric if it's categorical
+    if df[target_column].dtype == 'object' or df[target_column].dtype.name == 'category':
+        df[target_column] = pd.factorize(df[target_column])[0]
+    
     return df
 
 # Function to split the data into training and testing sets, separately for each class
