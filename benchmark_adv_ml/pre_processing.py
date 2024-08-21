@@ -6,8 +6,10 @@ from sklearn.model_selection import train_test_split
 
 # Function to load data and preprocess it
 def load_and_preprocess_data(file_path, target_column='label'):
-    df = pd.read_csv(file_path)  # Remove index_col=0 to avoid issues with missing or misaligned indices
-    
+    df = pd.read_csv(file_path)  # Load the dataset
+    print(f"Data shape: {df.shape}")  # Print the shape of the dataset
+    print(f"Original target column values:\n{df[target_column].head()}")
+
     # Ensure all columns except target are numeric
     for col in df.columns:
         if col != target_column:
@@ -18,15 +20,30 @@ def load_and_preprocess_data(file_path, target_column='label'):
     
     # Convert target column to numeric if it's categorical
     if df[target_column].dtype == 'object' or df[target_column].dtype.name == 'category':
-        df[target_column] = pd.factorize(df[target_column])[0]
-    
+        df[target_column], unique_vals = pd.factorize(df[target_column])
+        print(f"Factorized target column values:\n{df[target_column].head()}")
+        print(f"Mapping: {dict(enumerate(unique_vals))}")
+
+    # Print the unique values to verify factorization
+    print(f"Unique values in target column after factorization: {df[target_column].unique()}")
+    print(f"Processed data:\n{df.head()}")  # Print the first few rows to ensure proper processing
+
     return df
 
 # Function to split the data into training and testing sets, separately for each class
 def split_data(df, target_column, test_size=0.2, random_state=None):
+    # Check if the target column has been correctly processed
+    print(f"Unique values in target column: {df[target_column].unique()}")
+
     # Separate the data by class
     df_class_0 = df[df[target_column] == 0]
     df_class_1 = df[df[target_column] == 1]
+
+    print(f"Class 0 samples: {len(df_class_0)}, Class 1 samples: {len(df_class_1)}")
+
+    # Ensure there are enough samples to split
+    if len(df_class_0) == 0 or len(df_class_1) == 0:
+        raise ValueError("One of the classes has no samples, cannot perform train/test split.")
 
     # Split each class individually, retaining indices
     X_train_0, X_test_0, y_train_0, y_test_0 = train_test_split(
@@ -49,7 +66,8 @@ def split_data(df, target_column, test_size=0.2, random_state=None):
     X_test = pd.concat([X_test_0, X_test_1])
     y_test = pd.concat([y_test_0, y_test_1])
 
-    # Ensure the indices (sample names) are preserved
+    print(f"Train set size: {X_train.shape[0]}, Test set size: {X_test.shape[0]}")
+    
     return {'train': {'X': X_train, 'y': y_train},
             'test': {'X': X_test, 'y': y_test}}
 
