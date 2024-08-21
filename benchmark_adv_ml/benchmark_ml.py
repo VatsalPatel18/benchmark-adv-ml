@@ -11,6 +11,7 @@ def main():
     parser.add_argument('--n_samples', type=int, default=None, help='Number of samples to generate for the dataset. Leave empty if using an existing dataset.')
     parser.add_argument('--n_features', type=int, default=10, help='Number of features in the generated dataset.')
     parser.add_argument('--data', type=str, help='Path to the existing CSV file containing the dataset.')
+    parser.add_argument('--target', type=str, default='label', help='Target column name in the dataset.')  # Added target argument
     parser.add_argument('--output', type=str, required=True, help='Directory to save the final results and plots.')
     parser.add_argument('--prelim_output', type=str, required=True, help='Directory to save the preliminary results (predictions).')
     parser.add_argument('--n_runs', type=int, default=20, help='Number of runs for model stability evaluation.')
@@ -36,7 +37,7 @@ def main():
     
     for model in models:
         print(f"Running model: {model}")
-        fc.model_stability_evaluation(df, 'label', model, n_runs=args.n_runs, prediction_dir=args.prelim_output, random_state=args.seed)
+        fc.model_stability_evaluation(df, args.target, model, n_runs=args.n_runs, prediction_dir=args.prelim_output, random_state=args.seed)
 
     # Step 3: Process results
     aggregated_metrics = aggregate_metrics(args.prelim_output)
@@ -52,4 +53,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
