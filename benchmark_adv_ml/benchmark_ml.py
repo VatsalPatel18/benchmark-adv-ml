@@ -7,10 +7,10 @@ from .result_process import aggregate_metrics, aggregate_feature_importance, agg
 from .make_plots import plot_auc_curves, plot_auc_boxplot, plot_feature_importance, plot_radar_chart
 
 def main():
-    parser = argparse.ArgumentParser(description="Run the full benchmark ML pipeline using all models.")
+    parser = argparse.ArgumentParser(description=S"Run the full benchmark ML pipeline using all models.")
     parser.add_argument('--n_samples', type=int, default=None, help='Number of samples to generate for the dataset. Leave empty if using an existing dataset.')
     parser.add_argument('--n_features', type=int, default=10, help='Number of features in the generated dataset.')
-    parser.add_argument('--data', type=str, help='Path to the existing CSV file containing the dataset.')
+    parser.add_argument('--data', type=str, help='Path to the existing CV file containing the dataset.')
     parser.add_argument('--target', type=str, default='label', help='Target column name in the dataset.')  # Added target argument
     parser.add_argument('--output', type=str, required=True, help='Directory to save the final results and plots.')
     parser.add_argument('--prelim_output', type=str, required=True, help='Directory to save the preliminary results (predictions).')

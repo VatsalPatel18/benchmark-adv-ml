@@ -17,16 +17,23 @@ You can install the package directly from PyPI:
 pip install benchmark-adv-ml
 ```
 
-## Usage 
+## Usage in Unix
 
 ```bash
 benchmark-adv-ml --data ./your_dataset.csv --output ./final_results --prelim_output ./prelim_results --n_runs 10 --seed 42
+```
+
+## Useage in python 
+
+```bash
+python -m benchmark_adv_ml --data ./Raisin_Dataset.data --output ./final_results --prelim_output ./prelim_results --n_runs 10 --seed 42
 ```
 
 ## Command-Line Arguments
 
 --data: Path to the existing CSV file containing the dataset.
 --output: Directory to save the final results and plots.
+--target : Target column name in the dataset. ( default : 'label')
 --prelim_output: Directory to save the preliminary results (predictions).
 --n_runs: Number of runs for model stability evaluation (default is 20).
 --seed: Seed for random state (default is 42).
