@@ -13,7 +13,7 @@ poetry build
 
 # Step 3: Publish the package to PyPI (or a configured repository)
 echo "Publishing the package..."
-poetry publish --build
+poetry publish 
 
 # Step 4: Git add all changes
 echo "Adding changes to Git..."

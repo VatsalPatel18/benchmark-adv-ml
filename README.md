@@ -26,8 +26,14 @@ benchmark-adv-ml --data ./your_dataset.csv --output ./final_results --prelim_out
 ## Useage in python 
 
 ```bash
-python -m benchmark_adv_ml --data ./Raisin_Dataset.data --output ./final_results --prelim_output ./prelim_results --n_runs 10 --seed 42
+python -m benchmark_adv_ml benchmark --data ./Raisin_Dataset.data --output ./final_results --prelim_output ./prelim_results --n_runs 10 --seed 42
 ```
+## Train Autoencoder Model 
+```bash
+python -m benchmark_adv_ml autoencoder --data ./Raisin_Dataset.data --epochs 10 --output_dir ./final_results/ --prelim_output ./prelim_results/ --latent_dim 10 --batch_size 32 --validation_split 0.1 --test_size 0.2 --seed 42
+```
+
+
 
 ## Command-Line Arguments
 
@@ -39,7 +45,7 @@ python -m benchmark_adv_ml --data ./Raisin_Dataset.data --output ./final_results
 --seed: Seed for random state (default is 42).
 
 
-## Example 
+## Example run : Benchmark Code 
 
 ```bash
 benchmark-adv-ml --data ./your_dataset.csv --output ./final_results --prelim_output ./prelim_results --n_runs 10 --seed 42
