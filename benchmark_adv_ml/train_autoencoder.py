@@ -6,9 +6,9 @@ import os
 import pandas as pd
 import numpy as np
 import math
-from autoencoder import Autoencoder
+from .autoencoder import Autoencoder
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from pre_processing import load_and_preprocess_data, split_data  # Import your preprocessing functions
+from .pre_processing import load_and_preprocess_data, split_data  # Import your preprocessing functions
 
 def save_training_log(history, output_dir):
     """
