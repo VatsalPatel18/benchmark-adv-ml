@@ -5,10 +5,15 @@ import os
 from sklearn.model_selection import train_test_split
 
 # Function to load data and preprocess it
-def load_and_preprocess_data(file_path, target_column='label'):
+def load_and_preprocess_data(file_path, target_column='label', id_column='SampleID'):
     df = pd.read_csv(file_path)  # Load the dataset
     print(f"Data shape: {df.shape}")  # Print the shape of the dataset
     print(f"Original target column values:\n{df[target_column].head()}")
+
+    # Filter out the id column
+    if id_column in df.columns:
+        df = df.drop(columns=[id_column])
+        print(f"Data shape after dropping id column: {df.shape}")
 
     # Ensure all columns except target are numeric
     for col in df.columns:
@@ -67,6 +72,8 @@ def split_data(df, target_column, test_size=0.2, random_state=None):
     y_test = pd.concat([y_test_0, y_test_1])
 
     print(f"Train set size: {X_train.shape[0]}, Test set size: {X_test.shape[0]}")
+
+    print(X_train)
     
     return {'train': {'X': X_train, 'y': y_train},
             'test': {'X': X_test, 'y': y_test}}

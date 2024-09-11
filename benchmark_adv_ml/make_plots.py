@@ -119,6 +119,25 @@ def plot_radar_chart(processed_dir, output_dir):
     plt.show()
     print(f"Radar chart saved to {output_file}")
 
+def plot_reconstruction_error_distribution(prelim_output, output_dir):
+    recon_error_file = os.path.join(prelim_output, 'autoencoder_reconstruction_error.csv')
+    
+    if os.path.exists(recon_error_file):
+        recon_error_df = pd.read_csv(recon_error_file)
+        plt.figure(figsize=(10, 6))
+        
+        sns.histplot(recon_error_df['Reconstruction_Error'], bins=50, kde=True, color='blue')
+        plt.title('Reconstruction Error Distribution')
+        plt.xlabel('Reconstruction Error')
+        plt.ylabel('Frequency')
+        
+        output_file = os.path.join(output_dir, 'reconstruction_error_distribution.png')
+        plt.savefig(output_file)
+        plt.show()
+        print(f"Reconstruction error distribution plot saved to {output_file}")
+    else:
+        print(f"Reconstruction error file not found at {recon_error_file}. Skipping plot.")
+
 
 # Command-line argument parser
 def parse_arguments():
