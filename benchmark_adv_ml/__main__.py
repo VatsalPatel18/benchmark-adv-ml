@@ -41,6 +41,7 @@ def main():
     autoencoder_parser.add_argument('--checkpoint', action='store_true', help='Enable model checkpointing.')
     autoencoder_parser.add_argument('--seed', type=int, default=42, help='Seed for random state.')
 
+
     # Parse the command-line arguments
     args = parser.parse_args()
 
@@ -50,9 +51,8 @@ def main():
         benchmark_main()
 
     elif args.command == 'autoencoder':
-        # Call the autoencoder function with the relevant arguments
-        sys.argv = [''] + [f'--{k}' if v is True else f'--{k}={v}' for k, v in vars(args).items() if v is not None and k != 'command']
-        autoencoder_main()
+        # Call the autoencoder function and pass the args
+        autoencoder_main(args)
 
     else:
         parser.print_help()

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "benchmark-adv-ml"
-version = "0.1.9"
+version = "0.1.10"
 description = "Advanced benchmarking for machine learning models."
 authors = ["VatsalPatel18 <vatsal1804@gmail.com>"]
 readme = "README.md"
