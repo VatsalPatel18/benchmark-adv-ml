@@ -24,7 +24,7 @@ def main():
     autoencoder_parser = subparsers.add_parser('autoencoder', help="Train and evaluate an autoencoder model")
     autoencoder_parser.add_argument('--data', type=str, required=True, help='Path to the input CSV file containing the data.')
     autoencoder_parser.add_argument('--target', type=str, default='label', help='Target column name in the dataset.')
-    autoencoder_parser.add_argument('--sampleID', type=str, default='sampleID', help='SampleID column name in the dataset.')    
+    autoencoder_parser.add_argument('--sampleID', type=str, default='sampleID', help='SampleID column name in the dataset.')   
     autoencoder_parser.add_argument('--encoder_config', type=str, help='Path to the JSON file defining encoder architecture. If not provided, a temporary config will be generated.')
     autoencoder_parser.add_argument('--latent_dim', type=int, help='Dimensionality of the latent space. If not specified, defaults to input_dim // 8.')
     autoencoder_parser.add_argument('--activation', type=str, default='relu', help='Activation function to use in hidden layers.')
@@ -41,7 +41,6 @@ def main():
     autoencoder_parser.add_argument('--patience', type=int, default=5, help='Patience for early stopping.')
     autoencoder_parser.add_argument('--checkpoint', action='store_true', help='Enable model checkpointing.')
     autoencoder_parser.add_argument('--seed', type=int, default=42, help='Seed for random state.')
-
 
     # Parse the command-line arguments
     args = parser.parse_args()
