@@ -12,6 +12,7 @@ def main():
     parser.add_argument('--n_features', type=int, default=10, help='Number of features in the generated dataset.')
     parser.add_argument('--data', type=str, help='Path to the existing CV file containing the dataset.')
     parser.add_argument('--target', type=str, default='label', help='Target column name in the dataset.')  # Added target argument
+    parser.add_argument('--id_column', type=str, default='SampleID', help='Target column name in the dataset.')
     parser.add_argument('--output', type=str, required=True, help='Directory to save the final results and plots.')
     parser.add_argument('--prelim_output', type=str, required=True, help='Directory to save the preliminary results (predictions).')
     parser.add_argument('--n_runs', type=int, default=20, help='Number of runs for model stability evaluation.')
