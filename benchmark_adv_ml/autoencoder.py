@@ -205,3 +205,21 @@ class Autoencoder:
             return regularizers.l1_l2(**kwargs)
         else:
             raise ValueError(f"Unsupported regularizer type: {reg_type}")
+        
+    def extract_latent_features(self, x_train, batch_size=32, callbacks=None, verbose=1):
+        """
+        Extracts latent features from the encoder using the provided training data.
+
+        :param x_train: Numpy array or TensorFlow tensor, training data.
+        :param batch_size: Integer, size of the batches for prediction.
+        :param callbacks: List of tf.keras.callbacks instances (optional).
+        :param verbose: Integer, verbosity mode.
+        :return: Numpy array of latent features.
+        """
+        if self.encoder is None:
+            raise ValueError("Encoder model is not initialized or loaded.")
+
+        # Use the encoder to predict the latent features
+        latent_features = self.encoder.predict(x_train, batch_size=batch_size, callbacks=callbacks, verbose=verbose)
+
+        return latent_features

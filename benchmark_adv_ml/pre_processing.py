@@ -8,7 +8,10 @@ from sklearn.model_selection import train_test_split
 def load_and_preprocess_data(file_path, target_column='label', id_column='SampleID'):
     df = pd.read_csv(file_path)  # Load the dataset
     print(f"Data shape: {df.shape}")  # Print the shape of the dataset
-    print(f"Original target column values:\n{df[target_column].head()}")
+    try:
+        print(f"Original target column values:\n{df[target_column].head()}")
+    except:
+        pass
 
     # Filter out the id column
     if id_column in df.columns:
@@ -24,13 +27,17 @@ def load_and_preprocess_data(file_path, target_column='label', id_column='Sample
     df.fillna(df.mean(), inplace=True)
     
     # Convert target column to numeric if it's categorical
-    if df[target_column].dtype == 'object' or df[target_column].dtype.name == 'category':
-        df[target_column], unique_vals = pd.factorize(df[target_column])
-        print(f"Factorized target column values:\n{df[target_column].head()}")
-        print(f"Mapping: {dict(enumerate(unique_vals))}")
+    try:
+        if df[target_column].dtype == 'object' or df[target_column].dtype.name == 'category':
+            df[target_column], unique_vals = pd.factorize(df[target_column])
+            print(f"Factorized target column values:\n{df[target_column].head()}")
+            print(f"Mapping: {dict(enumerate(unique_vals))}")
+            print(f"Unique values in target column after factorization: {df[target_column].unique()}")
+    except:
+        print('No Target Column')
 
     # Print the unique values to verify factorization
-    print(f"Unique values in target column after factorization: {df[target_column].unique()}")
+
     print(f"Processed data:\n{df.head()}")  # Print the first few rows to ensure proper processing
 
     return df
@@ -77,6 +84,27 @@ def split_data(df, target_column, test_size=0.2, random_state=None):
     
     return {'train': {'X': X_train, 'y': y_train},
             'test': {'X': X_test, 'y': y_test}}
+
+
+def split_data_for_ae(df, test_size=0.2, random_state=None):
+    """
+    Splits the data into training and test sets for autoencoder usage.
+
+    :param df: DataFrame, where the columns are the feature names and the index represents sample IDs.
+    :param test_size: Proportion of data to include in the test set.
+    :param random_state: Seed for reproducibility of the split.
+    :return: Dictionary with 'train' and 'test' keys, each containing a DataFrame with the features.
+    """
+    # Split the data into training and test sets
+    X_train, X_test = train_test_split(df, test_size=test_size, random_state=random_state)
+    
+    # Print the sizes of the training and test sets
+    print(f"Train set size: {X_train.shape[0]}, Test set size: {X_test.shape[0]}")
+
+    # Return a dictionary with the split data
+    return {'train': {'X': X_train},
+            'test': {'X': X_test}}
+
 
 # Function to save the training and testing data into a specified output directory
 def save_split_data(split_data_dict, output_dir):

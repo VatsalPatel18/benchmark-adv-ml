@@ -6,9 +6,9 @@ import os
 import pandas as pd
 import numpy as np
 import math
-from .autoencoder import Autoencoder
+from autoencoder import Autoencoder
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from .pre_processing import load_and_preprocess_data, split_data  # Import your preprocessing functions
+from pre_processing import load_and_preprocess_data, split_data_for_ae  # Import your preprocessing functions
 
 def save_training_log(history, output_dir):
     """
@@ -76,20 +76,20 @@ def main(args):
     print(f"Data loaded and preprocessed from {args.data}, shape: {df.shape}")
 
     # Split data into training and testing sets
-    split_data_dict = split_data(df, target_column=args.target, test_size=args.test_size, random_state=args.seed)
-    X_train, y_train = split_data_dict['train']['X'], split_data_dict['train']['y']
-    X_test, y_test = split_data_dict['test']['X'], split_data_dict['test']['y']
+    split_data_dict = split_data_for_ae(df, test_size=args.test_size, random_state=args.seed)
+    X_train = split_data_dict['train']['X']
+    X_test = split_data_dict['test']['X']
 
     print(f"Training data shape: {X_train.shape}, Testing data shape: {X_test.shape}")
 
     # Optionally, split training data into training and validation sets
     if args.validation_split > 0:
         val_split = int(X_train.shape[0] * (1 - args.validation_split))
-        x_val, y_val = X_train[val_split:], y_train[val_split:]
-        X_train, y_train = X_train[:val_split], y_train[:val_split]
+        x_val = X_train[val_split:]
+        X_train = X_train[:val_split]
         print(f"Validation data shape: {x_val.shape}")
     else:
-        x_val, y_val = None, None
+        x_val = None
 
     # Generate encoder configuration dynamically if not provided
     if args.encoder_config:
@@ -163,11 +163,20 @@ def main(args):
     prelim_results_df.to_csv(prelim_results_path, index=False)
     print(f"Preliminary results saved to {prelim_results_path}")
 
+    # Extract latent features from X_train
+    df_feature = df.to_numpy()
+    print(df.index)
+    latent_features = autoencoder.extract_latent_features(df_feature, batch_size=args.batch_size, verbose=1)
+    # Save the latent features as a new CSV
+    latent_features_df = pd.DataFrame(latent_features, index=df.index)
+    latent_features_path = os.path.join(args.output_dir, 'latent_features.csv')
+    latent_features_df.to_csv(latent_features_path)
+    print(f"Latent features saved to {latent_features_path}")
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train and evaluate an autoencoder model.")
 
     parser.add_argument('--data', type=str, required=True, help='Path to the input CSV file containing the data.')
-    parser.add_argument('--target', type=str, default='label', help='Target column name in the dataset.')
     parser.add_argument('--encoder_config', type=str, help='Path to the JSON file defining encoder architecture. If not provided, a temporary config will be generated.')
     parser.add_argument('--latent_dim', type=int, help='Dimensionality of the latent space. If not specified, defaults to input_dim // 8.')
     parser.add_argument('--activation', type=str, default='relu', help='Activation function to use in hidden layers.')
