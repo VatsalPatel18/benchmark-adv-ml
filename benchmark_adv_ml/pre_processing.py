@@ -140,7 +140,7 @@ if __name__ == "__main__":
     args = parse_arguments()
 
     # Load and preprocess data
-    df = load_and_preprocess_data(args.data, args.target,args.id_column)
+    df = load_and_preprocess_data(args.data, args.target)
 
     # Split the data with the provided test size and seed
     split_data_dict = split_data(df, args.target, test_size=args.test_size, random_state=args.seed)

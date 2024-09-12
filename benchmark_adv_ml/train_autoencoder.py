@@ -72,7 +72,7 @@ def main(args):
     os.makedirs(args.prelim_output, exist_ok=True)
 
     # Load and preprocess data
-    df = load_and_preprocess_data(args.data, args.target,args.id_column)
+    df = load_and_preprocess_data(args.data, args.target)
     print(f"Data loaded and preprocessed from {args.data}, shape: {df.shape}")
 
     # Split data into training and testing sets
@@ -178,7 +178,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--data', type=str, required=True, help='Path to the input CSV file containing the data.')
     parser.add_argument('--target', type=str, default='label', help='Target column name in the dataset.')
-    parser.add_argument('--id_column', type=str, default='SampleID', help='Target column name in the dataset.')
     parser.add_argument('--encoder_config', type=str, help='Path to the JSON file defining encoder architecture. If not provided, a temporary config will be generated.')
     parser.add_argument('--latent_dim', type=int, help='Dimensionality of the latent space. If not specified, defaults to input_dim // 8.')
     parser.add_argument('--activation', type=str, default='relu', help='Activation function to use in hidden layers.')
