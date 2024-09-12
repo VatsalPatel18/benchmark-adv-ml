@@ -64,7 +64,6 @@ def load_prep_for_ae(file_path, id_column='SampleID'):
 
     return df
 
-
 # Function to split the data into training and testing sets, separately for each class
 def split_data(df, target_column, test_size=0.2, random_state=None):
     # Check if the target column has been correctly processed

@@ -42,6 +42,12 @@ def main():
     autoencoder_parser.add_argument('--checkpoint', action='store_true', help='Enable model checkpointing.')
     autoencoder_parser.add_argument('--seed', type=int, default=42, help='Seed for random state.')
 
+    clustering_parser = subparsers.add_parser('survival_clustering', help="Run the survival clustering pipeline")
+    clustering_parser.add_argument('--data_path', type=str, required=True, help='Path to the input CSV file containing patient features.')
+    clustering_parser.add_argument('--clinical_df_path', type=str, required=True, help='Path to the input CSV file containing clinical data.')
+    clustering_parser.add_argument('--save_dir', type=str, required=True, help='Directory to save the results.')
+
+
     # Parse the command-line arguments
     args = parser.parse_args()
 
@@ -53,9 +59,15 @@ def main():
     elif args.command == 'autoencoder':
         # Call the autoencoder function and pass the args
         autoencoder_main(args)
-
+        
+    elif args.command == 'survival_clustering':
+        # Initialize and run the clustering survival pipeline
+        clustering_survival = ClusteringSurvival(
+            data_path=args.data_path,
+            clinical_df_path=args.clinical_df_path,
+            save_path=args.save_dir
+        )
     else:
         parser.print_help()
-
 if __name__ == "__main__":
     main()
