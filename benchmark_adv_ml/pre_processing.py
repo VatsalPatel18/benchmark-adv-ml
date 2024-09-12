@@ -54,8 +54,9 @@ def load_prep_for_ae(file_path, id_column='SampleID'):
         print(f"Data shape after dropping ID column: {df.shape}")
 
     # Ensure all columns are numeric
-    df = df.apply(pd.to_numeric, errors='coerce')
-
+    
+    df = df.apply(pd.to_numeric, errors='coerce').dropna(axis=1, how='all')
+    
     # Fill missing values with the mean of each column
     df.fillna(df.mean(), inplace=True)
     
