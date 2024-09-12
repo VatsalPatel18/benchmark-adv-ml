@@ -129,6 +129,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Preprocess the dataset and optionally save the split data.")
     parser.add_argument('--data', type=str, required=True, help='Path to the input CSV file.')
     parser.add_argument('--target', type=str, default='label', help='Target column name in the dataset.')
+    parser.add_argument('--id_column', type=str, default='SampleID', help='Target column name in the dataset.')
     parser.add_argument('--output', type=str, help='Directory to save the preprocessed data (optional).')
     parser.add_argument('--seed', type=int, default=None, help='Seed for random state of split.')
     parser.add_argument('--test_size', type=float, default=0.2, help='Proportion of the dataset to include in the test split.')
@@ -139,7 +140,7 @@ if __name__ == "__main__":
     args = parse_arguments()
 
     # Load and preprocess data
-    df = load_and_preprocess_data(args.data, args.target)
+    df = load_and_preprocess_data(args.data, args.target,args.id_column)
 
     # Split the data with the provided test size and seed
     split_data_dict = split_data(df, args.target, test_size=args.test_size, random_state=args.seed)
