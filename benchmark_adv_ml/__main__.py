@@ -2,6 +2,7 @@ import argparse
 import sys
 from .benchmark_ml import main as benchmark_main
 from .train_autoencoder import main as autoencoder_main
+from .ClusteringSurvival import ClusteringSurvival 
 
 def main():
     # Create the top-level parser
