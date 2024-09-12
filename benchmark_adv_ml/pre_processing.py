@@ -36,30 +36,21 @@ def load_and_preprocess_data(file_path, target_column='label', id_column='Sample
     return df
 
 def load_prep_for_ae(file_path, id_column='SampleID'):
-    """
-    Loads and preprocesses the dataset for autoencoder usage, where there is no target column, 
-    and only feature columns are present.
-
-    :param file_path: Path to the CSV file containing the dataset.
-    :param id_column: Column name that represents the sample IDs, which will be dropped if present.
-    :return: Preprocessed DataFrame with only feature columns.
-    """
     # Load the dataset
     df = pd.read_csv(file_path)
     print(f"Data shape: {df.shape}")  # Print the shape of the dataset
 
-    # Drop the ID column if it exists
+    # Set the ID column as index if it exists
     if id_column in df.columns:
-        df = df.drop(columns=[id_column])
-        print(f"Data shape after dropping ID column: {df.shape}")
+        df.set_index(id_column, inplace=True)
+        print(f"Data shape after setting ID column as index: {df.shape}")
 
     # Ensure all columns are numeric
-    
     df = df.apply(pd.to_numeric, errors='coerce').dropna(axis=1, how='all')
-    
+
     # Fill missing values with the mean of each column
     df.fillna(df.mean(), inplace=True)
-    
+
     print(f"Processed data (first few rows):\n{df.head()}")  # Print the first few rows to ensure proper processing
 
     return df
@@ -108,18 +99,12 @@ def split_data(df, target_column, test_size=0.2, random_state=None):
             'test': {'X': X_test, 'y': y_test}}
 
 
-def split_data_for_ae(df, test_size=0.2, random_state=None):
-    """
-    Splits the data into training and test sets for autoencoder usage.
+# pre_processing.py
 
-    :param df: DataFrame, where the columns are the feature names and the index represents sample IDs.
-    :param test_size: Proportion of data to include in the test set.
-    :param random_state: Seed for reproducibility of the split.
-    :return: Dictionary with 'train' and 'test' keys, each containing a DataFrame with the features.
-    """
+def split_data_for_ae(df, test_size=0.2, random_state=None):
     # Split the data into training and test sets
     X_train, X_test = train_test_split(df, test_size=test_size, random_state=random_state)
-    
+
     # Print the sizes of the training and test sets
     print(f"Train set size: {X_train.shape[0]}, Test set size: {X_test.shape[0]}")
 

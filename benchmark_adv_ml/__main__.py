@@ -43,6 +43,7 @@ def main():
     autoencoder_parser.add_argument('--checkpoint', action='store_true', help='Enable model checkpointing.')
     autoencoder_parser.add_argument('--seed', type=int, default=42, help='Seed for random state.')
 
+    # Survival Clustering Code
     clustering_parser = subparsers.add_parser('survival_clustering', help="Run the survival clustering pipeline")
     clustering_parser.add_argument('--data_path', type=str, required=True, help='Path to the input CSV file containing patient features.')
     clustering_parser.add_argument('--clinical_df_path', type=str, required=True, help='Path to the input CSV file containing clinical data.')

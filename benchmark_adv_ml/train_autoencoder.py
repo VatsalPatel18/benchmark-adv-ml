@@ -165,10 +165,12 @@ def main(args):
 
     # Extract latent features from X_train
     df_feature = df.to_numpy()
-    print(df.index)
+    print(f"Data index (Patient IDs):\n{df.index}")
     latent_features = autoencoder.extract_latent_features(df_feature, batch_size=args.batch_size, verbose=1)
+    num_latent_features = latent_features.shape[1]
+    latent_feature_columns = [f'latent_{i+1}' for i in range(num_latent_features)]
     # Save the latent features as a new CSV
-    latent_features_df = pd.DataFrame(latent_features, index=df.index)
+    latent_features_df = pd.DataFrame(latent_features, index=df.index, columns=latent_feature_columns)
     latent_features_path = os.path.join(args.output_dir, 'latent_features.csv')
     latent_features_df.to_csv(latent_features_path)
     print(f"Latent features saved to {latent_features_path}")
