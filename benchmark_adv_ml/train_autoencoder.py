@@ -72,7 +72,7 @@ def main(args):
     os.makedirs(args.prelim_output, exist_ok=True)
 
     # Load and preprocess data
-    df = load_prep_for_ae(args.data, args.target,args.sampleID)
+    df = load_prep_for_ae(args.data,args.sampleID)
     print(f"Data loaded and preprocessed from {args.data}, shape: {df.shape}")
 
     # Split data into training and testing sets
