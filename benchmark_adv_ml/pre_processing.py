@@ -161,5 +161,4 @@ if __name__ == "__main__":
         train_X, train_y = split_data_dict['train']['X'], split_data_dict['train']['y']
         test_X, test_y = split_data_dict['test']['X'], split_data_dict['test']['y']
         print("Returning split data for further processing.")
-        # Returning as dataframes with indices
-        # In an actual implementation, you would typically handle this differently, depending on how you want to use the split data.
+

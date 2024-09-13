@@ -13,6 +13,8 @@ import matplotlib.cm as cm
 import itertools
 from sklearn.cluster import DBSCAN
 import os
+from joblib import dump
+
 
 class ClusteringSurvival:
     def __init__(self, data_path, clinical_df_path, save_path='final_result/'):
@@ -28,10 +30,12 @@ class ClusteringSurvival:
         self.pca_tsne()
         self.find_optimal_clusters()
         self.cluster_data()
+        self.save_kmeans_model() 
         self.visualize_clusters()
         self.plot_kaplan_meier()
         self.summary_table = self.generate_summary_table()
         self.perform_log_rank_test()
+        self.save_dataframe()
 
     def process(self):
         if self.clnc_df is not None:
@@ -63,10 +67,19 @@ class ClusteringSurvival:
     def cluster_data(self):
         if not hasattr(self, 'optimal_clusters'):
             raise ValueError("Please run 'find_optimal_clusters' method before clustering the data.")
-        kmeans = KMeans(n_clusters=self.optimal_clusters, random_state=0).fit(self.latent_features)
-        self.labels = kmeans.labels_
+        self.kmeans = KMeans(n_clusters=self.optimal_clusters, random_state=0).fit(self.latent_features)
+        self.labels = self.kmeans.labels_
         self.df['groups'] = self.labels 
         self.generate_color_list_based_on_median_survival()
+
+    def save_kmeans_model(self):
+        # Create a directory to save the clustering model
+        model_dir = os.path.join(self.save_dir, 'clustering_model')
+        os.makedirs(model_dir, exist_ok=True)
+        # Save the KMeans model using joblib
+        model_path = os.path.join(model_dir, 'kmeans_model.joblib')
+        dump(self.kmeans, model_path)
+        print(f"KMeans model saved to {model_path}")
 
     def cluster_data2(self, kclust):
         kmeans = KMeans(n_clusters=kclust, random_state=0).fit(self.latent_features)
@@ -239,3 +252,16 @@ class ClusteringSurvival:
         plt.savefig(f'{self.save_dir}{name}_median_survival.jpeg', dpi=300)
 
         plt.show()
+
+    def save_dataframe(self):
+        """
+        Saves the DataFrame with clustering results to a CSV file.
+        """
+        # Define the path where you want to save the DataFrame
+        df_path = os.path.join(self.save_dir, 'clustered_data.csv')
+
+        # Save the DataFrame to a CSV file
+        self.df.to_csv(df_path)
+
+        print(f"DataFrame with clustering results saved to {df_path}")
+

@@ -3,6 +3,10 @@ import sys
 from .benchmark_ml import main as benchmark_main
 from .train_autoencoder import main as autoencoder_main
 from .ClusteringSurvival import ClusteringSurvival 
+from .evaluate_extract_ae import main as evaluate_extract_ae_main
+from .predict_clusters import main as predict_clusters_main
+from .process_clustered_data import main as process_clustered_data_main
+
 
 def main():
     # Create the top-level parser
@@ -43,32 +47,59 @@ def main():
     autoencoder_parser.add_argument('--checkpoint', action='store_true', help='Enable model checkpointing.')
     autoencoder_parser.add_argument('--seed', type=int, default=42, help='Seed for random state.')
 
+    # Evaluate Autoencoder sub-command
+    evaluate_ae_parser = subparsers.add_parser('evaluate_autoencoder', help="Evaluate and extract features using a trained autoencoder")
+    evaluate_ae_parser.add_argument('--data', type=str, required=True, help='Path to the input CSV file containing the data.')
+    evaluate_ae_parser.add_argument('--sampleID', type=str, default='sampleID', help='SampleID column name in the dataset.')
+    evaluate_ae_parser.add_argument('--model_dir', type=str, required=True, help='Directory where the trained models are saved.')
+    evaluate_ae_parser.add_argument('--output_dir', type=str, required=True, help='Directory to save the evaluation metrics and latent features.')
+    evaluate_ae_parser.add_argument('--batch_size', type=int, default=32, help='Batch size for evaluation and feature extraction.')
+
     # Survival Clustering Code
     clustering_parser = subparsers.add_parser('survival_clustering', help="Run the survival clustering pipeline")
     clustering_parser.add_argument('--data_path', type=str, required=True, help='Path to the input CSV file containing patient features.')
     clustering_parser.add_argument('--clinical_df_path', type=str, required=True, help='Path to the input CSV file containing clinical data.')
     clustering_parser.add_argument('--save_dir', type=str, required=True, help='Directory to save the results.')
 
+    # Predict Clusters sub-command
+    predict_clusters_parser = subparsers.add_parser('predict_clusters', help="Predict clusters using a trained KMeans model and perform survival analysis")
+    predict_clusters_parser.add_argument('--data', type=str, required=True, help='Path to the input CSV file containing the latent features.')
+    predict_clusters_parser.add_argument('--model_dir', type=str, required=True, help='Directory where the trained KMeans model is saved.')
+    predict_clusters_parser.add_argument('--output_dir', type=str, required=True, help='Directory to save the cluster predictions and analysis results.')
 
-    # Parse the command-line arguments
+    # Process Clustered Data sub-command
+    process_clustered_data_parser = subparsers.add_parser('process_clustered_data', help="Process clustered data to keep two groups and assign binary labels")
+    process_clustered_data_parser.add_argument('--data', type=str, required=True, help='Path to the clustered_data.csv file.')
+    process_clustered_data_parser.add_argument('--group1', type=int, required=True, help='First group number to keep.')
+    process_clustered_data_parser.add_argument('--group2', type=int, required=True, help='Second group number to keep.')
+    process_clustered_data_parser.add_argument('--sampleID', type=str, default='PatientID', help='SampleID column name in the dataset.')
+    process_clustered_data_parser.add_argument('--output_file', type=str, required=True, help='Path to save the processed dataframe.')
+
+
     args = parser.parse_args()
 
     if args.command == 'benchmark':
-        # Call the benchmark function with the relevant arguments
         sys.argv = [''] + [f'--{k}' if v is True else f'--{k}={v}' for k, v in vars(args).items() if v is not None and k != 'command']
         benchmark_main()
 
     elif args.command == 'autoencoder':
-        # Call the autoencoder function and pass the args
         autoencoder_main(args)
+
+    elif args.command == 'evaluate_autoencoder':
+        evaluate_extract_ae_main(args)
         
     elif args.command == 'survival_clustering':
-        # Initialize and run the clustering survival pipeline
         clustering_survival = ClusteringSurvival(
             data_path=args.data_path,
             clinical_df_path=args.clinical_df_path,
             save_path=args.save_dir
         )
+    elif args.command == 'predict_clusters':
+        predict_clusters_main(args)
+
+    elif args.command == 'process_clustered_data':
+        # Call the process_clustered_data function
+        process_clustered_data_main()
     else:
         parser.print_help()
 if __name__ == "__main__":

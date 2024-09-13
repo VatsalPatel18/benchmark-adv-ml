@@ -166,14 +166,20 @@ class Autoencoder:
 
     def save_models(self, save_dir):
         """
-        Saves the encoder, decoder, and autoencoder models to the specified directory.
+        Saves the encoder, decoder, and autoencoder models to a subdirectory named 'autoencoder' within the specified directory.
 
         :param save_dir: String, directory path to save the models.
         """
-        self.encoder.save(f"{save_dir}/encoder.h5")
-        self.decoder.save(f"{save_dir}/decoder.h5")
-        self.autoencoder.save(f"{save_dir}/autoencoder.h5")
-        print(f"Models saved to {save_dir}")
+        # Create a subdirectory named 'autoencoder' within save_dir
+        model_dir = os.path.join(save_dir, 'autoencoder')
+        os.makedirs(model_dir, exist_ok=True)
+
+        # Save the models in the new subdirectory
+        self.encoder.save(os.path.join(model_dir, 'encoder.h5'))
+        self.decoder.save(os.path.join(model_dir, 'decoder.h5'))
+        self.autoencoder.save(os.path.join(model_dir, 'autoencoder.h5'))
+
+        print(f"Models saved to {model_dir}")
 
     def load_models(self, save_dir):
         """
