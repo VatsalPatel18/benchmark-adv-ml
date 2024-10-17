@@ -42,6 +42,11 @@ pip install .
 ## Useage
 The package provides a command-line interface (CLI) for ease of use. Below are examples of how to use each component.
 
+### Download example data
+```bash
+wget https://github.com/VatsalPatel18/benchmark-adv-ml/blob/master/temp_data.csv
+```
+
 ### Benchmark Machine Learning Models
 Run the benchmark ML pipeline to evaluate model stability across multiple runs.
 
